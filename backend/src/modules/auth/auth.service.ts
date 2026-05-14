@@ -69,10 +69,14 @@ const login = async (payload: LoginPayload) => {
 
   await user.save();
 
+  const userObject = user.toObject();
+
+  delete userObject.password;
+
   return {
     accessToken,
     refreshToken,
-    user,
+    user: userObject,
   };
 };
 
