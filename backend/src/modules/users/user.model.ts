@@ -1,12 +1,6 @@
-import mongoose, { Document } from "mongoose";
+import mongoose from "mongoose";
 
-export interface IUser extends Document {
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  refreshToken: string;
-}
+import type { IUser } from "./user.types.js";
 
 const userSchema = new mongoose.Schema<IUser>(
   {
@@ -23,27 +17,60 @@ const userSchema = new mongoose.Schema<IUser>(
 
     password: {
       type: String,
-      required: true,
+
+      select: false,
+
+      default: null,
+    },
+
+    resetOtp: {
+      type: String,
+      default: null,
+    },
+
+    resetOtpExpire: {
+      type: Date,
+      default: null,
+    },
+
+    image: {
+      type: String,
+
+      default: null,
+    },
+
+    googleId: {
+      type: String,
+
+      default: null,
+    },
+
+    provider: {
+      type: String,
+
+      enum: ["credentials", "google"],
+
+      default: "credentials",
     },
 
     role: {
       type: String,
-      enum: [
-        "super_admin",
-        "admin",
-        "delivery_staff",
-        "customer",
-      ],
+
+      enum: ["super_admin", "admin", "delivery_staff", "customer"],
+
       default: "customer",
     },
-     refreshToken: {
+
+    refreshToken: {
       type: String,
+
       default: null,
     },
   },
+
   {
     timestamps: true,
-  }
+  },
 );
 
 const User = mongoose.model<IUser>("User", userSchema);

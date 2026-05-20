@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-import testRoutes from "./routes/test.route.js"
 import authRoutes from "./modules/auth/auth.route.js"
 
 
@@ -25,7 +24,6 @@ app.get("/",(req,res)=>{
     res.send("Backend Running")
 })
 
-app.use("/api/test", testRoutes)
 app.use("/api/v1/auth", authRoutes);
 
 
