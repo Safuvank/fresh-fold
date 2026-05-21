@@ -1,0 +1,9 @@
+import { useMutation } from "@tanstack/react-query";
+
+import { signupUser } from "../services/auth.service";
+
+export const useRegister = () => {
+  return useMutation({
+    mutationFn: signupUser,
+  });
+};
