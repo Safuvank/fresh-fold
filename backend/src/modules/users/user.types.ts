@@ -15,6 +15,8 @@ export interface IUser extends Document {
 
   refreshToken: string | null;
 
+  isOtpVerified:Boolean;
+
   resetOtp?: string | null;
 
   resetOtpExpire?: Date | null;

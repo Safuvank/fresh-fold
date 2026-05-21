@@ -41,6 +41,10 @@ const register = async (payload: RegisterPayload) => {
 
   const refreshToken = generateRefreshToken(jwtPayload);
 
+  user.refreshToken = refreshToken;
+
+  await user.save();
+
   return {
     accessToken,
     refreshToken,
@@ -145,25 +149,18 @@ const googleLogin = async (payload: GoogleLoginPayload) => {
   };
 };
 
-
-export const forgotPasswordService = async (
-  email: string
-) => {
+export const forgotPasswordService = async (email: string) => {
   const user = await User.findOne({ email });
 
   if (!user) {
     throw new Error("User not found");
   }
 
-  const otp = Math.floor(
-    100000 + Math.random() * 900000
-  ).toString();
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
   user.resetOtp = otp;
 
-  user.resetOtpExpire = new Date(
-    Date.now() + 5 * 60 * 1000
-  );
+  user.resetOtpExpire = new Date(Date.now() + 5 * 60 * 1000);
 
   await user.save();
 
@@ -183,11 +180,7 @@ export const forgotPasswordService = async (
   });
 };
 
-
-export const verifyOtpService = async (
-  email: string,
-  otp: string
-) => {
+export const verifyOtpService = async (email: string, otp: string) => {
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -198,36 +191,37 @@ export const verifyOtpService = async (
     throw new Error("Invalid OTP");
   }
 
-  if (
-    !user.resetOtpExpire ||
-    user.resetOtpExpire < new Date()
-  ) {
+  if (!user.resetOtpExpire || user.resetOtpExpire < new Date()) {
     throw new Error("OTP expired");
   }
+
+  user.isOtpVerified = true;
+
+  await user.save();
 
   return true;
 };
 
-export const resetPasswordService = async (
-  email: string,
-  password: string
-) => {
+export const resetPasswordService = async (email: string, password: string) => {
   const user = await User.findOne({ email });
 
   if (!user) {
     throw new Error("User not found");
   }
 
-  const hashedPassword = await bcrypt.hash(
-    password,
-    10
-  );
+  if (!user.isOtpVerified) {
+    throw new Error("OTP not verified");
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   user.password = hashedPassword;
 
   user.resetOtp = null;
 
   user.resetOtpExpire = null;
+
+  user.isOtpVerified = false;
 
   await user.save();
 };

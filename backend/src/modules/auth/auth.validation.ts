@@ -11,7 +11,6 @@ export const loginSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-
 export const googleLoginSchema = z.object({
   name: z.string(),
 
@@ -20,4 +19,18 @@ export const googleLoginSchema = z.object({
   image: z.string().optional(),
 
   googleId: z.string(),
+});
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
+export const verifyOtpSchema = z.object({
+  email: z.string().email(),
+  otp: z.string().length(6),
+});
+
+export const resetPasswordSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
 });

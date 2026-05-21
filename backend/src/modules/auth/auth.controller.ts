@@ -4,6 +4,9 @@ import {
   loginSchema,
   registerSchema,
   googleLoginSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  verifyOtpSchema,
 } from "./auth.validation.js";
 
 import {
@@ -26,10 +29,10 @@ export const registerUser = async (
       message: "User registered successfully",
       data: result,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     res.status(400).json({
       success: false,
-      message: error.message,
+      message: error instanceof Error ? error.message : "Something went wrong",
     });
   }
 };
@@ -45,10 +48,10 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       message: "Login successful",
       data: result,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     res.status(400).json({
       success: false,
-      message: error.message,
+      message: error instanceof Error ? error.message : "Something went wrong",
     });
   }
 };
@@ -67,59 +70,66 @@ export const googleLoginUser = async (
       message: "Google login successful",
       data: result,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     res.status(400).json({
       success: false,
-      message: error.message,
+      message: error instanceof Error ? error.message : "Something went wrong",
     });
   }
 };
 
 export const forgotPassword = async (req: Request, res: Response) => {
-  
   try {
-    await forgotPasswordService(req.body.email);
+     console.log("body" + req.body);
+    const validatedData = forgotPasswordSchema.parse(req.body);
+
+    await forgotPasswordService(validatedData.email);
 
     res.status(200).json({
       success: true,
       message: "OTP sent successfully",
     });
-  } catch (error) {
+  } catch (error: unknown) {
+     console.log(error);
     res.status(400).json({
       success: false,
-      message: error.message || error,
+      message: error instanceof Error ? error.message : "Something went wrong",
     });
   }
 };
 
 export const verifyOtp = async (req: Request, res: Response) => {
   try {
-    await verifyOtpService(req.body.email, req.body.otp);
+    const validatedData = verifyOtpSchema.parse(req.body);
+
+    await verifyOtpService(validatedData.email, validatedData.otp);
 
     res.status(200).json({
       success: true,
       message: "OTP verified",
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     res.status(400).json({
       success: false,
-      message: error.message,
+      message: error instanceof Error ? error.message : "Something went wrong",
     });
   }
 };
 
 export const resetPassword = async (req: Request, res: Response) => {
   try {
-    await resetPasswordService(req.body.email, req.body.password);
+    const validatedData = resetPasswordSchema.parse(req.body);
+
+    await resetPasswordService(validatedData.email, validatedData.password);
 
     res.status(200).json({
       success: true,
       message: "Password reset successful",
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     res.status(400).json({
       success: false,
-      message: error.message,
+      message: error instanceof Error ? error.message : "Something went wrong",
     });
   }
 };

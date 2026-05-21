@@ -33,7 +33,7 @@ export const verifyToken = (
     const decoded = jwt.verify(
       token,
       process.env.ACCESS_TOKEN_SECRET as string,
-    ) as unknown as JwtPayload;
+    ) as JwtPayload;
 
     req.user = decoded;
 
