@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./modules/auth/auth.route.js";
+import bookingRoutes from "./modules/booking/booking.routes.js";
 
 dotenv.config();
 
@@ -23,5 +24,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/bookings", bookingRoutes);
 
 export default app;

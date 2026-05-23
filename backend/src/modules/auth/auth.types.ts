@@ -16,9 +16,6 @@
 //   googleId: string;
 // }
 
-
-
-
 import { z } from "zod";
 
 import {
@@ -27,11 +24,8 @@ import {
   googleLoginSchema,
 } from "./auth.validation.js";
 
-export type RegisterPayload =
-  z.infer<typeof registerSchema>;
+export type RegisterPayload = z.infer<typeof registerSchema>;
 
-export type LoginPayload =
-  z.infer<typeof loginSchema>;
+export type LoginPayload = z.infer<typeof loginSchema>;
 
-export type GoogleLoginPayload =
-  z.infer<typeof googleLoginSchema>;
+export type GoogleLoginPayload = z.infer<typeof googleLoginSchema>;

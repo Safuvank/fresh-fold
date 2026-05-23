@@ -3,7 +3,7 @@ import HowItWorks from "../components/HowItWorks";
 import Pricing from "../components/Pricing";
 import ServicesSlider from "../components/ServicesSlider";
 import Testimonials from "../components/Testimonials";
-// import CTA from "../components/CTA";
+import Page from "./pricing/page";
 
 export default function LandingPage() {
   return (
@@ -13,7 +13,7 @@ export default function LandingPage() {
       <Pricing />
       <ServicesSlider />
       <Testimonials />
-      {/* <CTA /> */}
+      <Page />
     </div>
   );
 }
